@@ -4,16 +4,21 @@ import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
+    private final String TAG = "MainActivity";
+    private final String TOPIC = "test";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +26,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        FirebaseMessaging.getInstance().subscribeToTopic(TOPIC)
+                .addOnCompleteListener((task) -> {
+                    String msg = "Subscribed to topic " + TOPIC;
+                    if(!task.isSuccessful()) {
+                        msg = "Subscribing to topic " + TOPIC + "failed.";
+                    }
+                    Log.d(TAG, msg);
+                    Toast toast = Toast.makeText(MainActivity.this, msg ,Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.TOP, 0, 20);
+                    toast.show();
+                });
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
