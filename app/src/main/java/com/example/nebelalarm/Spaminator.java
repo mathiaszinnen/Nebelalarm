@@ -13,12 +13,13 @@ public class Spaminator extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        Log.d(TAG, "From: " + remoteMessage.getFrom());
+        Log.d(TAG, "From: " + remoteMessage.getFrom() +
+                ". Type: " + remoteMessage.getMessageType() +
+                ". Message id: " + remoteMessage.getMessageId());
 
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
-
             if (/* Check if data needs to be processed by long running job */ true) {
                 // For long-running tasks (10 seconds or more) use Firebase Job Dispatcher.
                 scheduleJob();
